@@ -1,0 +1,23 @@
+<ion-view view-title="Describe This">
+  <ion-content padding="true">
+    <div class="list">
+      <label class="item item-input">
+        <input
+          type="text"
+          style="font-size:1.2em;height:2em;"
+          ng-model="description.body"
+          placeholder="Description">
+      </label>
+    </div>
+    <button
+      ng-click="saveDescription()"
+      class="button button-block button-balanced">
+      Save
+    </button>
+    <div class="card">
+      <div class="item item-image">
+        <img ng-src="{{photo.medium_url}}">
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
