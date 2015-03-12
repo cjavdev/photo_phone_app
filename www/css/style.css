@@ -1,6 +1,12 @@
-/* Empty. Add your own CSS if you like */
-
 .list input.big-input {
   font-size: 1.2em;
   height: 2em;
+}
+.centered {
+  display: block;
+  margin: 0 auto;
+}
+.shoot-title {
+  text-align: center;
+  padding: 30px;
 }
