@@ -1,5 +1,12 @@
 angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
+.controller('LoginCtrl', function($scope, User) {
+  $scope.user = {};
+
+  $scope.login = function () {
+    User.login($scope.user);
+  };
+})
 .controller('ShootCtrl', function($scope, Camera, Description) {
   $scope.description = {};
 
