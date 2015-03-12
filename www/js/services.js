@@ -109,11 +109,14 @@ angular.module('starter.services', [])
       },
       photograph: function (params) {
         var dfd = $q.defer();
+        console.log(params);
         $http.post(base + "/photos", params)
           .success(function (photo) {
+            console.log('resolve');
             dfd.resolve(photo);
           })
           .error(function (data) {
+            console.log('rejected');
             dfd.reject(data);
           });
         return dfd.promise;

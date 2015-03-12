@@ -49,7 +49,7 @@ angular.module('starter.controllers', [])
 
     $scope.getPhoto = function () {
       Camera.getPicture().then(function (image) {
-        $scope.photo.image = image;
+        $scope.photo.image = "data:image/jpeg;base64," + image;
         Description.photograph($scope.photo)
           .then(function () {
             $location.path("/tab/describe");
