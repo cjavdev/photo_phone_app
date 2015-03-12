@@ -1,0 +1,12 @@
+<ion-view view-title="Photo">
+  <ion-content padding="true">
+    <div class="item item-image">
+      <img ng-src="{{photo.medium_url}}">
+    </div>
+
+    <a ng-repeat="desc in photo.descriptions" href="#/tab/description/{{desc.id}}" class="item item-icon-left">
+      <i class="icon ion-asterisk"></i>
+      {{desc.body}}
+    </a>
+  </ion-content>
+</ion-view>

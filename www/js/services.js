@@ -1,9 +1,12 @@
+var base = "https://photophone.herokuapp.com/api";
+// var base = base + "";
+
 angular.module('starter.services', [])
   .factory('User', function ($q, $http, $localstorage) {
     return {
       loggedIn: function () {
         var _user = $localstorage.getObject('user');
-        if(JSON.stringify(_user) === '{}') {
+        if (JSON.stringify(_user) === '{}') {
           return false;
         }
         $http.defaults.headers.common['X-USER-EMAIL'] = _user.email;
@@ -14,13 +17,13 @@ angular.module('starter.services', [])
       },
       login: function (params) {
         var dfd = $q.defer();
-        $http.post("http://localhost:3000/api/users", params)
+        $http.post(base + "/users", params)
           .success(function (user) {
             dfd.resolve(user);
             $localstorage.setObject('user', user);
             $http.defaults.headers.common['X-USER-EMAIL'] = user.email;
           })
-          .error(function(data) {
+          .error(function (data) {
             dfd.reject(data);
           });
         return dfd.promise;
@@ -31,7 +34,7 @@ angular.module('starter.services', [])
     return {
       nextDescribable: function () {
         var dfd = $q.defer();
-        $http.get("http://localhost:3000/api/photos/next")
+        $http.get(base + "/photos/next")
           .success(function (photo) {
             dfd.resolve(photo);
           })
@@ -42,7 +45,7 @@ angular.module('starter.services', [])
       },
       describe: function (params) {
         var dfd = $q.defer();
-        $http.post("http://localhost:3000/api/descriptions", params)
+        $http.post(base + "/descriptions", params)
           .success(function (photo) {
             dfd.resolve(photo);
           })
@@ -50,15 +53,26 @@ angular.module('starter.services', [])
             dfd.reject(data);
           });
         return dfd.promise;
-
+      },
+      get: function (id) {
+        var dfd = $q.defer();
+        $http.get(base + "/photos/" + id)
+          .success(function (description) {
+            dfd.resolve(description);
+          })
+          .error(function (data) {
+            dfd.reject(data);
+          });
+        return dfd.promise;
       }
+
     };
   })
   .factory('PhotoDescription', function ($q, $http) {
     return {
       all: function () {
         var dfd = $q.defer();
-        $http.get("http://localhost:3000/api/photo_descriptions")
+        $http.get(base + "/photo_descriptions")
           .success(function (photos) {
             dfd.resolve(photos);
           })
@@ -73,7 +87,7 @@ angular.module('starter.services', [])
     return {
       nextPhotoable: function () {
         var dfd = $q.defer();
-        $http.get("http://localhost:3000/api/descriptions/next")
+        $http.get(base + "/descriptions/next")
           .success(function (description) {
             dfd.resolve(description);
           })
@@ -84,7 +98,7 @@ angular.module('starter.services', [])
       },
       get: function (id) {
         var dfd = $q.defer();
-        $http.get("http://localhost:3000/api/descriptions/" + id)
+        $http.get(base + "/descriptions/" + id)
           .success(function (description) {
             dfd.resolve(description);
           })
@@ -92,20 +106,37 @@ angular.module('starter.services', [])
             dfd.reject(data);
           });
         return dfd.promise;
-      }
+      },
+      photograph: function (params) {
+        var dfd = $q.defer();
+        $http.post(base + "/photos", params)
+          .success(function (photo) {
+            dfd.resolve(photo);
+          })
+          .error(function (data) {
+            dfd.reject(data);
+          });
+        return dfd.promise;
+      },
     };
   })
   .factory('Camera', ['$q',
     function ($q) {
       return {
-        getPicture: function (options) {
+        getPicture: function () {
           var q = $q.defer();
           navigator.camera.getPicture(function (result) {
             // Do any magic you need
             q.resolve(result);
           }, function (err) {
             q.reject(err);
-          }, options);
+          }, {
+            quality: 40,
+            targetWidth: 320,
+            targetHeight: 320,
+            saveToPhotoAlbum: false,
+            destinationType: Camera.DestinationType.DATA_URL
+          });
 
           return q.promise;
         }
@@ -137,10 +168,9 @@ angular.module('starter.services', [])
           if (rejection.status === 401) {
             $location.path('/login');
             return $q.reject(rejection);
-          } else {
-            return $q.reject(rejection);
           }
+          return $q.reject(rejection);
         }
-      }
+      };
     }
   ]);

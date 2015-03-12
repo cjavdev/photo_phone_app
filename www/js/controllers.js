@@ -5,6 +5,13 @@ angular.module('starter.controllers', [])
       $scope.description = description;
     });
   })
+  .controller('PhotoCtrl', function ($scope, $stateParams, Photo) {
+    $scope.photo = {};
+
+    Photo.get($stateParams.id).then(function (photo) {
+      $scope.photo = photo;
+    });
+  })
   .controller('DashCtrl', function ($scope, PhotoDescription) {
     $scope.photos = [];
     PhotoDescription.all().then(function (photos) {
@@ -24,12 +31,14 @@ angular.module('starter.controllers', [])
       User.login($scope.user).then(checkLogin);
     };
   })
-  .controller('ShootCtrl', function ($scope, Camera, Description) {
+  .controller('ShootCtrl', function ($scope, $location, Camera, Description) {
     $scope.description = {};
+    $scope.photo = {};
 
     function next() {
       Description.nextPhotoable().then(function (description) {
         $scope.description = description;
+        $scope.photo.description_id = description.id;
       });
     }
     next();
@@ -39,8 +48,12 @@ angular.module('starter.controllers', [])
     };
 
     $scope.getPhoto = function () {
-      Camera.getPicture().then(function (imageURI) {
-        console.log(imageURI);
+      Camera.getPicture().then(function (image) {
+        $scope.photo.image = image;
+        Description.photograph($scope.photo)
+          .then(function () {
+            $location.path("/tab/describe");
+          });
       }, function (err) {
         console.err(err);
       });

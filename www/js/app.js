@@ -61,7 +61,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           }
         }
       })
-      .state('tab.description', {
+      .state('tab.photo', {
+        url: '/photo/{id}',
+        views: {
+          'tab-dash': {
+            templateUrl: 'templates/tab-photo.html',
+            controller: 'PhotoCtrl'
+          }
+        }
+      }).state('tab.description', {
         url: '/description/{id}',
         views: {
           'tab-dash': {
