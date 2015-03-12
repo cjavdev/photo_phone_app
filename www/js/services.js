@@ -54,11 +54,37 @@ angular.module('starter.services', [])
       }
     };
   })
+  .factory('PhotoDescription', function ($q, $http) {
+    return {
+      all: function () {
+        var dfd = $q.defer();
+        $http.get("http://localhost:3000/api/photo_descriptions")
+          .success(function (photos) {
+            dfd.resolve(photos);
+          })
+          .error(function (data) {
+            dfd.reject(data);
+          });
+        return dfd.promise;
+      }
+    };
+  })
   .factory('Description', function ($q, $http) {
     return {
       nextPhotoable: function () {
         var dfd = $q.defer();
         $http.get("http://localhost:3000/api/descriptions/next")
+          .success(function (description) {
+            dfd.resolve(description);
+          })
+          .error(function (data) {
+            dfd.reject(data);
+          });
+        return dfd.promise;
+      },
+      get: function (id) {
+        var dfd = $q.defer();
+        $http.get("http://localhost:3000/api/descriptions/" + id)
           .success(function (description) {
             dfd.resolve(description);
           })

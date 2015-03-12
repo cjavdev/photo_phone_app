@@ -1,5 +1,16 @@
 angular.module('starter.controllers', [])
-  .controller('DashCtrl', function ($scope) {})
+  .controller('DescriptionCtrl', function ($scope, $stateParams, Description) {
+    $scope.description = {};
+    Description.get($stateParams.id).then(function (description) {
+      $scope.description = description;
+    });
+  })
+  .controller('DashCtrl', function ($scope, PhotoDescription) {
+    $scope.photos = [];
+    PhotoDescription.all().then(function (photos) {
+      $scope.photos = photos;
+    });
+  })
   .controller('LoginCtrl', function ($scope, $location, User) {
     function checkLogin() {
       if (User.loggedIn()) {

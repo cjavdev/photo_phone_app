@@ -1,0 +1,10 @@
+<ion-view view-title="Description">
+  <ion-content padding="true">
+    <div class="centered-title">
+      <h2>{{description.body}}</h2>
+    </div>
+    <div ng-repeat="photo in description.photo">
+      <img ng-src="{{photo.medium_url}}">
+    </div>
+  </ion-content>
+</ion-view>

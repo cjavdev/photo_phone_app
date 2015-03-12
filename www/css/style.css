@@ -6,7 +6,10 @@
   display: block;
   margin: 0 auto;
 }
-.shoot-title {
+.centered-title {
   text-align: center;
-  padding: 30px;
+}
+.shoot-title {
+  padding-top: 30px;
+  padding-bottom: 80px;
 }
