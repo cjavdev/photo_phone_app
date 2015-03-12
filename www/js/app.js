@@ -5,9 +5,14 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
+/*global angular, window, cordova */
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-
-.run(function ($ionicPlatform) {
+  .run(function ($ionicPlatform, User) {
+    if (User.loggedIn()) {
+      console.log("User is logged in");
+    } else {
+      console.log("User is NOT logged in.");
+    }
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -31,16 +36,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
       })
-
-    // setup an abstract state for the tabs directive
-    .state('tab', {
-      url: "/tab",
-      abstract: true,
-      templateUrl: "templates/tabs.html"
-    })
-
-    // Each tab has its own nav history stack:
-    .state('tab.dash', {
+      // setup an abstract state for the tabs directive
+      .state('tab', {
+        url: "/tab",
+        abstract: true,
+        templateUrl: "templates/tabs.html"
+      })
+      // Each tab has its own nav history stack:
+      .state('tab.dash', {
         url: '/dash',
         views: {
           'tab-dash': {
@@ -67,8 +70,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           }
         }
       });
-
-    // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/tab/dash');
   })
   .config(['$httpProvider',

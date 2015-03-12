@@ -1,12 +1,24 @@
 angular.module('starter.services', [])
   .factory('User', function ($q, $http, $localstorage) {
     return {
+      loggedIn: function () {
+        var _user = $localstorage.getObject('user');
+        if(JSON.stringify(_user) === '{}') {
+          return false;
+        }
+        $http.defaults.headers.common['X-USER-EMAIL'] = _user.email;
+        return true;
+      },
+      email: function () {
+        return $localstorage.getObject('user').email;
+      },
       login: function (params) {
         var dfd = $q.defer();
         $http.post("http://localhost:3000/api/users", params)
           .success(function (user) {
             dfd.resolve(user);
             $localstorage.setObject('user', user);
+            $http.defaults.headers.common['X-USER-EMAIL'] = user.email;
           })
           .error(function(data) {
             dfd.reject(data);
@@ -27,6 +39,18 @@ angular.module('starter.services', [])
             dfd.reject(data);
           });
         return dfd.promise;
+      },
+      describe: function (params) {
+        var dfd = $q.defer();
+        $http.post("http://localhost:3000/api/descriptions", params)
+          .success(function (photo) {
+            dfd.resolve(photo);
+          })
+          .error(function (data) {
+            dfd.reject(data);
+          });
+        return dfd.promise;
+
       }
     };
   })
@@ -84,12 +108,11 @@ angular.module('starter.services', [])
     function ($q, $location) {
       return {
         responseError: function (rejection) {
-          debugger;
-          if (response.status === 401) {
+          if (rejection.status === 401) {
             $location.path('/login');
-            return $q.reject(response);
+            return $q.reject(rejection);
           } else {
-            return $q.reject(response);
+            return $q.reject(rejection);
           }
         }
       }

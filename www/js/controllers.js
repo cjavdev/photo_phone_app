@@ -1,10 +1,16 @@
 angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
-.controller('LoginCtrl', function($scope, User) {
-  $scope.user = {};
+.controller('LoginCtrl', function($scope, $location, User) {
+  function checkLogin () {
+    if(User.loggedIn()) {
+      $location.path("/");
+    }
+  }
+  checkLogin();
 
+  $scope.user = {};
   $scope.login = function () {
-    User.login($scope.user);
+    User.login($scope.user).then(checkLogin);
   };
 })
 .controller('ShootCtrl', function($scope, Camera, Description) {
@@ -38,6 +44,6 @@ angular.module('starter.controllers', [])
   });
 
   $scope.saveDescription = function () {
-    console.log($scope.description);
+    Photo.describe($scope.description);
   };
 });
